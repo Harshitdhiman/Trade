@@ -166,12 +166,14 @@
     <div class="options-container">
         <button id="safeModeButton" onclick="toggleSafeMode()">Safe Mode: Off</button>
         <select id="riskPercentage">
-            <option value="1">1%</option>
+            <option value="0.5">0.5%</option>
+            <option value="1" selected>1%</option>
             <option value="2">2%</option>
             <option value="3">3%</option>
             <option value="4">4%</option>
             <option value="5">5%</option>
         </select>
+        
     </div>
 
     <div class="input-group">
@@ -219,16 +221,15 @@
         }
 
         let initialTradeAmount = Math.floor(totalAmount * riskPercentage);
+        let first_trade = initialTradeAmount;
         let expectedProfit = initialTradeAmount * assetPercentage;
         let cumulativeLoss = 0;
         let tradeResultsHTML = '';
 
         for (let i = 1; i <= 6; i++) {
-            if (safeMode && i == 4) {
-                expectedProfit /= 2;
-            }
+            if (safeMode && i == 1) {
 
-            let requiredTradeAmount = (cumulativeLoss + expectedProfit) / assetPercentage;
+                let requiredTradeAmount = (cumulativeLoss + expectedProfit) / assetPercentage;
             let roundedTradeAmount = Math.floor(requiredTradeAmount);
 
             if ((requiredTradeAmount - roundedTradeAmount) >= 0.80) {
@@ -250,6 +251,168 @@
 
             initialTradeAmount = roundedTradeAmount;
             cumulativeLoss += initialTradeAmount;
+
+
+            }
+
+            if (safeMode && i == 2) {
+
+                let requiredTradeAmount = first_trade*2;
+            let roundedTradeAmount = Math.floor(requiredTradeAmount);
+
+            if ((requiredTradeAmount - roundedTradeAmount) >= 0.80) {
+                roundedTradeAmount++;
+            }
+
+            let expectedProfitForCurrentTrade = roundedTradeAmount * assetPercentage;
+            let totalProfit = expectedProfitForCurrentTrade - cumulativeLoss;
+
+            tradeResultsHTML += `
+                <tr>
+                    <td>${i}</td>
+                    <td>$${roundedTradeAmount}</td>
+                    <td>$${expectedProfitForCurrentTrade.toFixed(2)}</td>
+                    <td>-$${Math.abs(cumulativeLoss).toFixed(2)}</td>
+                    <td style="color: #20ff00;">$${totalProfit.toFixed(2)}</td>
+                </tr>
+            `;
+
+            initialTradeAmount = roundedTradeAmount;
+            cumulativeLoss += initialTradeAmount;
+
+
+            }
+
+            if (safeMode && i == 3) {
+
+            let requiredTradeAmount = (cumulativeLoss) / assetPercentage;
+            let roundedTradeAmount = Math.ceil(requiredTradeAmount);
+
+            let expectedProfitForCurrentTrade = roundedTradeAmount * assetPercentage;
+            let totalProfit = expectedProfitForCurrentTrade - cumulativeLoss;
+
+            tradeResultsHTML += `
+                <tr>
+                    <td>${i}</td>
+                    <td>$${roundedTradeAmount}</td>
+                    <td>$${expectedProfitForCurrentTrade.toFixed(2)}</td>
+                    <td>-$${Math.abs(cumulativeLoss).toFixed(2)}</td>
+                    <td style="color: #20ff00;">$${totalProfit.toFixed(2)}</td>
+                </tr>
+            `;
+
+            initialTradeAmount = roundedTradeAmount;
+            cumulativeLoss += initialTradeAmount;
+
+
+            }
+
+            if (safeMode && i == 4) {
+
+                let requiredTradeAmount = (cumulativeLoss+expectedProfit) / assetPercentage;
+                let roundedTradeAmount = Math.floor(requiredTradeAmount);
+
+                if ((requiredTradeAmount - roundedTradeAmount) >= 0.80) {
+                    roundedTradeAmount++;
+                }
+    
+                let expectedProfitForCurrentTrade = roundedTradeAmount * assetPercentage;
+                let totalProfit = expectedProfitForCurrentTrade - cumulativeLoss;
+    
+                tradeResultsHTML += `
+                    <tr>
+                        <td>${i}</td>
+                        <td>$${roundedTradeAmount}</td>
+                        <td>$${expectedProfitForCurrentTrade.toFixed(2)}</td>
+                        <td>-$${Math.abs(cumulativeLoss).toFixed(2)}</td>
+                        <td style="color: #20ff00;">$${totalProfit.toFixed(2)}</td>
+                    </tr>
+                `;
+    
+                initialTradeAmount = roundedTradeAmount;
+                cumulativeLoss += initialTradeAmount;
+    
+    
+                }
+
+                if (safeMode && i == 5) {
+
+                    let requiredTradeAmount = (cumulativeLoss+expectedProfit) / assetPercentage;
+                    let roundedTradeAmount = Math.floor(requiredTradeAmount);
+                    
+                    if ((requiredTradeAmount - roundedTradeAmount) >= 0.80) {
+                        roundedTradeAmount++;
+                    }
+        
+                    let expectedProfitForCurrentTrade = roundedTradeAmount * assetPercentage;
+                    let totalProfit = expectedProfitForCurrentTrade - cumulativeLoss;
+        
+                    tradeResultsHTML += `
+                        <tr>
+                            <td>${i}</td>
+                            <td>$${roundedTradeAmount}</td>
+                            <td>$${expectedProfitForCurrentTrade.toFixed(2)}</td>
+                            <td>-$${Math.abs(cumulativeLoss).toFixed(2)}</td>
+                            <td style="color: #20ff00;">$${totalProfit.toFixed(2)}</td>
+                        </tr>
+                    `;
+        
+                    initialTradeAmount = roundedTradeAmount;
+                    cumulativeLoss += initialTradeAmount;
+        
+        
+                    }
+
+                    if (safeMode && i == 6) {
+
+                        let requiredTradeAmount = (cumulativeLoss) / assetPercentage;
+                        let roundedTradeAmount = Math.ceil(requiredTradeAmount);
+            
+                        let expectedProfitForCurrentTrade = roundedTradeAmount * assetPercentage;
+                        let totalProfit = expectedProfitForCurrentTrade - cumulativeLoss;
+            
+                        tradeResultsHTML += `
+                            <tr>
+                                <td>${i}</td>
+                                <td>$${roundedTradeAmount}</td>
+                                <td>$${expectedProfitForCurrentTrade.toFixed(2)}</td>
+                                <td>-$${Math.abs(cumulativeLoss).toFixed(2)}</td>
+                                <td style="color: #20ff00;">$${totalProfit.toFixed(2)}</td>
+                            </tr>
+                        `;
+            
+                        initialTradeAmount = roundedTradeAmount;
+                        cumulativeLoss += initialTradeAmount;
+            
+            
+                        }
+                        if (!safeMode) {
+
+                            let requiredTradeAmount = (cumulativeLoss+expectedProfit) / assetPercentage;
+                            let roundedTradeAmount = Math.floor(requiredTradeAmount);
+                            
+                            if ((requiredTradeAmount - roundedTradeAmount) >= 0.80) {
+                                roundedTradeAmount++;
+                            }
+                
+                            let expectedProfitForCurrentTrade = roundedTradeAmount * assetPercentage;
+                            let totalProfit = expectedProfitForCurrentTrade - cumulativeLoss;
+                
+                            tradeResultsHTML += `
+                                <tr>
+                                    <td>${i}</td>
+                                    <td>$${roundedTradeAmount}</td>
+                                    <td>$${expectedProfitForCurrentTrade.toFixed(2)}</td>
+                                    <td>-$${Math.abs(cumulativeLoss).toFixed(2)}</td>
+                                    <td style="color: #20ff00;">$${totalProfit.toFixed(2)}</td>
+                                </tr>
+                            `;
+                
+                            initialTradeAmount = roundedTradeAmount;
+                            cumulativeLoss += initialTradeAmount;
+                
+                
+                            }
         }
 
         const table = document.getElementById("tradeResults");
